@@ -2,12 +2,21 @@ import Foundation
 import Supabase
 
 protocol AuthServicing {
+    func signIn(email: String, password: String) async throws
     func signUp(email: String, password: String) async throws
     func verifySignupOTP(email: String, token: String) async throws
     func resendSignupOTP(email: String) async throws
 }
 
 struct SupabaseAuthService: AuthServicing {
+    func signIn(email: String, password: String) async throws {
+        let client = try SupabaseClientFactory.makeClient()
+        _ = try await client.auth.signIn(
+            email: email,
+            password: password
+        )
+    }
+
     func signUp(email: String, password: String) async throws {
         let client = try SupabaseClientFactory.makeClient()
         _ = try await client.auth.signUp(email: email, password: password)
